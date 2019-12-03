@@ -1,0 +1,23 @@
+language:       scala
+scala:
+              - 2.12.10
+jdk:
+              - openjdk8
+cache:
+  directories:
+              - $HOME/.ivy2/cache
+              - $HOME/.sbt/boot/
+install:
+              - sudo apt-get update
+              - sudo apt-get install zsh
+              - sudo chmod +x scripts/*
+              - ./sbt ++$TRAVIS_SCALA_VERSION update
+script:         ./sbt ++$TRAVIS_SCALA_VERSION fullCoverageTest
+after_script:
+              - scripts/prepare-test-results-for-ci.sh
+              - find $HOME/.sbt -name "*.lock" | xargs rm
+              - find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm
+notifications:
+  email:
+    on_success: never
+    on_failure: change
