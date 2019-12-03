@@ -23,5 +23,20 @@ lazy val naturalorder = crossProject(JVMPlatform, JSPlatform).crossType(CrossTyp
 lazy val naturalorderJVM = naturalorder.jvm
 lazy val naturalorderJS = naturalorder.js
 
+lazy val readme = scalatex.ScalatexReadme(
+  projectId = "readme",
+  wd        = file(""),
+  url       = "https://github.com/scalalandio/naturalorder/tree/master",
+  source    = "Readme"
+)
+  .configureModule
+  .noPublish
+  .enablePlugins(GhpagesPlugin)
+  .settings(
+    siteSourceDirectory := target.value / "scalatex",
+    git.remoteRepo := "git@github.com:scalalandio/naturalorder.git",
+    Jekyll / makeSite / includeFilter := new FileFilter { def accept(p: File) = true }
+  )
+
 addCommandAlias("fullTest", ";test;scalastyle")
 addCommandAlias("fullCoverageTest", ";coverage;test;coverageReport;coverageAggregate;scalastyle")
